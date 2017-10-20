@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+        .box{
+            width:300px;
+            height:500px;
+            /*border:1px solid #000;*/
+            margin:0 auto;
+            background:url(img/2.jpg);
+            background-size:contain;
+            /*filter: blur(5px);*/
+            position:relative;
+        }
+        .blur{
+            width:300px;
+            height:500px;
+            background-color: #100b26;
+            /*background-size:contain;*/
+            filter: blur(8px);
+            opacity:.6;
+        }
+        .ground{
+            width:200px;
+            height:200px;
+            border-radius:50%;
+            border:5px solid #000;
+            position:absolute;
+            top:50px;
+            left:50px;
+        }
+        .des{
+            width:200px;
+            text-align: center;
+            color: #12cc40;
+            position:absolute;
+            top:270px;
+            left:50px;;
+        }
+        .interface{
+            width:300px;
+            height:200px;
+            border-radius:20px;
+            box-shadow:1px -1px 2px #fff inset;
+            /*border:1px solid #000;*/
+            background-color:#000;
+            position:absolute;
+            bottom:0;
+            left:0;
+            opacity:.5;
+            z-index:50;
+        }
+        .progress{
+            width:100%;
+            height:100%;
+            position:absolute;
+            top:50px;
+            left:50px;
+        }
+        .seek-bar{
+            height:4px;
+            width:200px;
+            border-radius:4px;
+            background-color: #fff;
+        }
+        .play-bar{
+            width:0px;
+            height:4px;
+            border-radius:4px;
+            background-color: #12cc40;
+            position:absolute;
+            top:0;
+            left:0;
+        }
+        .handle{
+            width:5px;
+            height:5px;
+            border-radius:50%;
+            background-color:#12cc40;
+            border:4px solid #fff;
+            position:absolute;
+            top:-4px;
+            left:-3px;
+        }
+        .time-sip{
+            display:inline-block;
+            width:35px;
+            height:15px;
+            font-size: 12px;
+            /*background-color: #fff;*/
+            color:#fff;
+            position:absolute;
+            top:-5px;;
+            left:-40px;
+        }
+        .time-sep{
+            display:inline-block;
+            width:35px;
+            height:15px;
+            font-size: 12px;
+            /*background-color: #fff;*/
+            color:#fff;
+            position:absolute;
+            top:45px;;
+            right:5px;
+        }
+        .prv{
+            width:25px;
+            height:25px;
+            border-radius:50%;
+            border:2px solid #12cc40;
+            position:absolute;
+            top:7px;
+            left:0;
+        }
+        .pause-back{
+            width:0;
+            height:0;
+            border-top:5px solid transparent;
+            border-right:8px solid #12cc40;
+            border-bottom:5px solid transparent;
+            position:absolute;
+            top:7px;
+            left:10px;
+        }
+        .before{
+            width:2px;
+            height:8px;
+            background-color:#12cc40;
+            position:absolute;
+            top:8px;
+            left:7px;
+        }
+        .nxt{
+            width:25px;
+            height:25px;
+            border-radius:50%;
+            border:2px solid #12cc40;
+            position:absolute;
+            top:7px;
+            left:125px;
+        }
+        .pause-front{
+            width:0;
+            height:0;
+            border-top:5px solid transparent;
+            border-left:8px solid #12cc40;
+            border-bottom:5px solid transparent;
+            position:absolute;
+            top:7px;
+            left:7px;
+        }
+        .after{
+            width:2px;
+            height:8px;
+            background-color: #12cc40;
+            position:absolute;
+            top:8px;
+            left:16px;
+        }
+        .holder{
+            width:30px;
+            height:30px;
+            border-radius:50%;
+            border:2px solid #12cc40;
+            display:inline-block;
+            position:absolute;
+            top:3px;
+            left:60px;
+            z-index:10;
+            cursor:pointer;
+        }
+        .holder:hover{
+            transform:scale(1.2)
+        }
+        .pause{
+            width:0;
+            height:0;
+            border-top:8px solid transparent;
+            border-left:13px solid #12cc40;
+            border-bottom:8px solid transparent;
+            position:absolute;
+            top:7px;
+            left:10px;
+        }
+        .holder-play{
+            width:30px;
+            height:30px;
+            border-radius:50%;
+            border:2px solid #12cc40;
+            display:none;
+            position:absolute;
+            top:3px;
+            left:60px;
+            z-index:10;
+            color:#fff;
+            text-align: center;
+            line-height: 30px;
+            font-weight: 900;
+            cursor:pointer;
+        }
+        .holder-play:hover{
+            transform:scale(1.2);
+        }
+        .holder-play span{
+            color:#12cc40;
+        }
+        .play{
+            /*width:100%;*/
+            /*height:100%;*/
+            position:absolute;
+            bottom:100px;;
+            left:70px;
+        }
+
+    </style>
+</head>
+<body>
+<audio></audio>
+<div class="box">
+    <div class="blur"></div>
+    <div class="ground"></div>
+    <div class="des"><span>金志文---太傻</span></div>
+    <!--播放界面-->
+    <div class="interface">
+        <!--播放进度条-->
+        <div class="progress">
+            <span class="time-sip"><em>00:00</em></span>
+            <div class="seek-bar"></div>
+            <div class="play-bar"></div>
+            <!--拖动-->
+            <div class="handle"></div>
+        </div>
+        <!--播放时间显示-->
+        <span class="time-sep"></span>
+
+        <div class="play">
+            <!--暂停按钮-->
+            <div class="prv"><div class="before"></div><div class="pause-back"></div></div>
+            <div class="holder">
+                <div class="pause"></div>
+            </div>
+            <!--播放按钮-->
+            <div class="holder-play">
+                <span>|</span><span>|</span>
+            </div>
+            <div class="nxt"><div class="pause-front"></div><div class="after"></div></div>
+        </div>
+
+        <!--音量按钮-->
+        <span class="vol-handle">
+            <div class="volume">
+                <div class="volume-bar"></div>
+                <div class="volume-play"></div>
+                <!--音量拖动-->
+                <div class="volume-handle"></div>
+            </div>
+        </span>
+
+    </div>
+</div>
+<script src="Music库.js" type="text/javascript" charset="gbk"></script>
+<script>
+     var audio=document.querySelector('audio');
+     var play=document.querySelector('.holder');
+     var pause=document.querySelector('.holder-play');
+     var prv=document.querySelector('.prv');
+     var nxt=document.querySelector('.nxt');
+     var ground=document.querySelector('.ground');
+     var des=document.querySelector('.des span');
+     var timesep=document.querySelector('.time-sep');
+     var timesip=document.querySelector('.time-sip em');
+     var playbar=document.querySelector('.play-bar');
+     var seekbar=document.querySelector('.seek-bar');
+     var handle=document.querySelector('.handle');
+
+
+
+
+     var index=0;
+    function init(){
+        ground.style.background='url('+data[index].pic+')';
+        ground.style.groundSize='cover';
+        des.innerHTML=data[index].singer+'---'+data[index].song;
+
+        audio.src=data[index].url;
+        audio.volume=0.5;
+    }
+    init();
+    play.addEventListener('click',function(){
+        init();
+        playMusic()
+
+
+    });
+    pause.addEventListener('click',function(){
+        init();
+        pauseMusic()
+
+    });
+     function npMusic(flag){
+         flag=flag==true?index++:index--;
+         index=index<0?data.length-1:index;
+         index=index>data.lenth-1?0:index;
+         init();
+         deg=0;
+         playMusic();
+     }
+
+
+    prv.addEventListener('click',function(){
+        npMusic(false);
+    });
+    nxt.addEventListener('click',function(){
+        npMusic(true);
+    });
+
+    audio.addEventListener('canplay',function(){
+
+        timesep.innerHTML=toMS(audio.duration);
+
+        audio.addEventListener('timeupdate',function(){
+            timesip.innerHTML=toMS(audio.currentTime);
+            var juli=(audio.currentTime/audio.duration)*200;
+           playbar.style.width=juli+'px';
+            handle.style.left=(juli-3)+'px';
+
+            if(audio.ended){
+                npMusic(true);
+            }
+
+
+        });
+        seekbar.addEventListener('click',function(e){
+            var posTime= e.offsetX/200*audio.duration;
+            playbar.style.width= e.offsetX+'px';
+            handle.style.left=(e.offsetX-3)+'px';
+            audio.currentTime=posTime;
+
+            playMusic()
+        });
+        playbar.addEventListener('click',function(e){
+            var posTime= e.offsetX/200*audio.duration;
+            playbar.style.width= e.offsetX+'px';
+            handle.style.left=(e.offsetX-3)+'px';
+            audio.currentTime=posTime;
+
+            playMusic()
+        });
+    });
+     var deg=0;
+     var timer=null;
+     function playMusic(){
+         play.style.display='none';
+         pause.style.display='block';
+         audio.play();
+         clearInterval(timer);
+         timer=setInterval(function(){
+             deg++;
+             ground.style.transform='rotate('+deg+'deg)';
+         },100);
+     }
+    function pauseMusic(){
+        play.style.display='block';
+        pause.style.display='none';
+        audio.pause();
+        clearInterval(timer);
+    }
+function toMS(num){
+    var m=Math.floor(num/60);
+    m=m<10?'0'+m:m;
+    var s=Math.floor(num%60);
+    s=s<10?'0'+s:s;
+    return(m+':'+s)
+}
+</script>
+</body>
+</html>
